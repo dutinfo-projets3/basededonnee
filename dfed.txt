@@ -1,0 +1,22 @@
+(News)        idNews: titleNews, dateNews, authorNews, descNews, contentNews
+(Suject)      idSubject: titleSubject
+(Formation)   idFormation: titleFormation, descFormation
+
+(   User    ) idUser: username, userFirstname, userLastname, userBirthday, userEmail, userAddress, userZipcode, userCountry, userPassword
+( UserAdmin )
+(UserStudent)         nationalStudentId
+(UserTeacher)
+
+(  Group    ) idGroup: groupTitle
+
+(  Agenda   ) idAgenda
+
+(  Course   ) idCourse: courseTitle
+
+(  Session  ) idSession: dateSession
+
+(   Mark    ) idMark: markValue
+
+( Document  ) idDoc: docTitle, docContent, 
+
+(   Image   ) idImage: urlImage
