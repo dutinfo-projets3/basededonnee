@@ -3,20 +3,18 @@
 ( Formation ) idFormation: titleFormation, descFormation
 
 (   User    ) idUser: username, userFirstname, userLastname, userBirthday, userEmail, userAddress, userZipcode, userCountry, userPassword, 
-                      #idImage
+                      #idImage, #idGroup
 ( UserAdmin )
 (UserStudent)         nationalStudentId
 (UserTeacher)
 
 (  Group    ) idGroup: groupTitle
 
-(  Agenda   ) idAgenda
-
 (  Course   ) idCourse: courseTitle
 
 (  Session  ) idSession: sessionTitle, sessionDate, #idGroup, #idUser (UserTeacher), #idSubject
 
-(   Mark    ) idMark: markValue, #idUser (Student)
+(   Mark    ) idMark: markValue, #idUser (Student), markCoeff, #idSubject
 
 ( Document  ) idDoc: docTitle, docURL
 
@@ -25,8 +23,7 @@
 
 (NewsPicture) idNews, idImage: [x]
 (FormPicture) idFormation, idImage: [x]
-(BelongingTo) idGroup, idUser: [x]
 (BelongingTo) idGroup, idGroup: [x]
-( Learning  ) idFormation, idSubject: [x]
+( Contains  ) idFormation, idSubject: [x]
 ( OnlineCrs ) idCourse, idDoc: [x]
 (MissingUser) idCourse, idUser: [x]
