@@ -1,38 +1,38 @@
-Nom,Description,Type
-idEvent,l’id de l’évennement,
-descEvent,Description de l’événement,
-titleEvent,titre de l’événement,
-dateEvent ,Date publication,
-authorEvent,id de l’auteur,
-idSubject,identifiant de la matière,
-titleSubject,Titre de la matière,
-idFormation,identifiant de la formation,
-titleFormation,titre de la formation,
-descFormation,description de la formation,
-imgFormation,image lier à la formation,
-idUser,identifiant l’utilisateur,
-userLastName,nom de l’utilisateur,
-userFirstName,prénom de l’utilisateur,
-userBirthday,date de naissance de l’utilisateur,
-userEmail,email de l’utilisateur,
-userCountry,nationnalité de l’utilisateur,
-sessionTitle,titre d’une séance de cours,
-userAdress,adresse de l’utilisateur,
-idDoc,identifiant du document,
-docTitle,titre du document,
-docContent,donnée du document,
-userZipcode,code postale de l’utilisateur,
-nationalStudentId,numéro nationale de l’étudiant,
-userPassword,mot de passe de l’utilisateur,
-user ,pseudo de l’utilisateur,
-idGroup,identifiant du groupe d’élèves,
-groupTitle,nom du groupe,
-idAgenda,identifiant de l’emploie du temps,
-idCourse,id du cours en ligne,
-idSession,identifiant de la séance de cours,
-sessionDate,Date de la séance de cours,
-idMark,identifiant de la note,
-markValue,Valeur de la note,
-courseTitle,titre du cours en ligne,
-idImage,Id d’une image,
-urlImage,Adresse de l’image,
+Nom,Description,Type,
+idEvent,l’id de l’évennement,N,
+descEvent,Description de l’événement,A,250
+titleEvent,titre de l’événement,A,50
+dateEvent ,Date publication,Date,JJ-MM-AA
+authorEvent,id de l’auteur,N,
+idSubject,identifiant de la matière,N,
+titleSubject,Titre de la matière,A,30
+idFormation,identifiant de la formation,N,
+titleFormation,titre de la formation,A,50
+descFormation,description de la formation,A,1000
+imgUrlFormation,image lier à la formation,A,100
+idUser,identifiant l’utilisateur,N,
+userLastName,nom de l’utilisateur,A,50
+userFirstName,prénom de l’utilisateur,A,50
+userBirthday,date de naissance de l’utilisateur,Date,JJ-MM-AAAA
+userEmail,email de l’utilisateur,A,50
+userCountry,nationnalité de l’utilisateur,A,50
+sessionTitle,titre d’une séance de cours,A,50
+userAdress,adresse de l’utilisateur,A,50
+idDoc,identifiant du document,N,
+docTitle,titre du document,A,30
+docUrl,donnée du document,A,50
+userZipcode,code postale de l’utilisateur,N,
+nationalStudentId,numéro nationale de l’étudiant,AN,50
+userPassword,mot de passe de l’utilisateur,AN,100
+user ,pseudo de l’utilisateur,AN,30
+idGroup,identifiant du groupe d’élèves,N,
+groupTitle,nom du groupe,A,20
+idAgenda,identifiant de l’emploie du temps,N,
+idCourse,id du cours en ligne,N,
+idSession,identifiant de la séance de cours,N,
+sessionDate,Date de la séance de cours,Date,JJ-MM-AA
+idMark,identifiant de la note,N,
+markValue,Valeur de la note,N,
+courseTitle,titre du cours en ligne,A,50
+idImage,Id d’une image,N,
+urlImage,Adresse de l’image,A,100
