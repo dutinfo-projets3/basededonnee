@@ -1,6 +1,6 @@
-(    News   ) idNews: titleNews, dateNews, authorNews, descNews, contentNews
-(  Suject   ) idSubject: titleSubject
-( Formation ) idFormation: titleFormation, descFormation
+(    News   ) idNews: newsTitle, newsDate, #newsAuthor, newsDesc, newsContent
+(  Suject   ) idSubject: subjectTitle 
+( Formation ) idFormation: formationTitle, formationDesc
 
 (   User    ) idUser: username, userFirstname, userLastname, userBirthday, userEmail, userAddress, userZipcode, userCountry, userPassword, 
                       #idImage, #idGroup
@@ -10,7 +10,7 @@
 
 (  Group    ) idGroup: groupTitle
 
-(  Course   ) idCourse: courseTitle
+(  OnlineCourse   ) idOnlineCourse: onlineCourseTitle
 
 (  Session  ) idSession: sessionTitle, sessionDate, #idGroup, #idUser (UserTeacher), #idSubject
 
@@ -23,7 +23,6 @@
 
 (NewsPicture) idNews, idImage: [x]
 (FormPicture) idFormation, idImage: [x]
-(BelongingTo) idGroup, idGroup: [x]
 ( Contains  ) idFormation, idSubject: [x]
-( OnlineCrs ) idCourse, idDoc: [x]
-(MissingUser) idCourse, idUser: [x]
+( OnlineFile ) idOnlineCourse, idDoc: [x]
+(MissingUser) idSession, idUser: [x]
