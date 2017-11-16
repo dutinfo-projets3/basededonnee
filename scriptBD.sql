@@ -60,7 +60,7 @@ create table ETREABSENT
 create table ETUDIANT
 (
    IDETUDIANT           int not null,
-   INE                  varchar(50) not null,
+   INE                  varchar(50),
    DATEENTREE           date,
    primary key (IDETUDIANT)
 );
