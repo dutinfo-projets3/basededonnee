@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* Nom de SGBD :  MySQL 5.0                                     */
-/* Date de création :  07/11/2017 20:18:06                      */
+/* Date de crï¿½ation :  07/11/2017 20:18:06                      */
 /*==============================================================*/
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -150,7 +150,8 @@ create table PERSONNE
    URLIMAGE             varchar(50),
    VILLE                varchar(50),
    NOMUTILISATEUR       varchar(8),
-   primary key (IDPERSONNE)
+   TYPE 		            int not null,
+	primary key (IDPERSONNE)
 );
 
 /*==============================================================*/
@@ -159,6 +160,8 @@ create table PERSONNE
 create table PROFESSEUR
 (
    IDPROFESSEUR         int not null,
+     DATEEMBAUCHE         date,
+    DATEDEPART        date,
    primary key (IDPROFESSEUR)
 );
 
@@ -195,6 +198,7 @@ create table SECRETAIRE
 (
    IDSECRETAIRE         int not null,
    DATEEMBAUCHE         date,
+    DATEDEPART        date,
    primary key (IDSECRETAIRE)
 );
 
