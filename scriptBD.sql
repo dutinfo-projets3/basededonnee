@@ -1,38 +1,29 @@
 /*==============================================================*/
 /* Nom de SGBD :  MySQL 5.0                                     */
-/* Date de cr�ation :  07/11/2017 20:18:06                      */
+/* Date de création :  07/11/2017 20:18:06                      */
 /*==============================================================*/
 
 SET FOREIGN_KEY_CHECKS = 0;
+
 drop table if exists Appartient;
-
 drop table if exists Absence;
-
 drop table if exists Etudiant;
-
-drop table if exists Evenement;
-
+drop table if exists News;
 drop table if exists Formation;
-
 drop table if exists Groupe;
-
 drop table if exists Image;
-
 drop table if exists Matiere;
-
 drop table if exists Notes;
-
-drop table if exists Personne;
-
+drop table if exists Utilisateur;
 drop table if exists Professeur;
-
 drop table if exists Salle;
-
 drop table if exists Seance;
-
 drop table if exists Secretaire;
-
 drop table if exists Semestre;
+
+DROP TRIGGER insert_new_type_user;
+DROP TRIGGER identifiant_login_trigger;
+
 SET FOREIGN_KEY_CHECKS = 1;
 /*==============================================================*/
 /* Table : APPARTIENT                                           */
@@ -68,7 +59,7 @@ create table Etudiant
 /*==============================================================*/
 /* Table : EVENEMENT                                            */
 /*==============================================================*/
-create table Evenement
+create table News
 (
    idEvenement         int not null AUTO_INCREMENT,
    idSecretaire         int not null,
@@ -139,18 +130,18 @@ create table Notes
 /*==============================================================*/
 /* Table : PERSONNE                                             */
 /*==============================================================*/
-create table Personne
+create table Utilisateur
 (
    idPersonne           int not null AUTO_INCREMENT,
-   motDePasse           varchar(64),
+   type 		            int not null,
+   nomUtilisateur       varchar(8),
    nomPers              varchar(50),
    prenomPers           varchar(50),
+   motDePasse           varchar(64),
    adresse              varchar(50),
+   ville                varchar(50),
    codePostal           numeric(5),
    urlImage             varchar(50),
-   ville                varchar(50),
-   nomUtilisateur       varchar(8),
-   type 		            int not null,
 	primary key (idPersonne)
 );
 
@@ -227,13 +218,13 @@ alter table Absence add constraint FK_ETREABSENT2 foreign key (idEtudiant)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
 
 alter table Etudiant add constraint FK_HERITAGE_PERS foreign key (idEtudiant)
-      references Personne (idPersonne) on delete restrict on update restrict;
+      references Utilisateur (idPersonne) on delete restrict on update restrict;
 
-alter table Evenement add constraint FK_AJOUTER foreign key (idSecretaire)
+alter table News add constraint FK_AJOUTER foreign key (idSecretaire)
       references Secretaire (idSecretaire) on delete restrict on update restrict;
 
 alter table Image add constraint FK_CONTENIR foreign key (idEvenement)
-      references Evenement (idEvenement) on delete restrict on update restrict;
+      references News (idEvenement) on delete restrict on update restrict;
 
 alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
       references Formation (idFormation) on delete restrict on update restrict;
@@ -245,7 +236,7 @@ alter table Notes add constraint FK_POSSEDER foreign key (idPersonne)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
 
 alter table Professeur add constraint FK_HERITAGE_PERS2 foreign key (idProfesseur)
-      references Personne (idPersonne) on delete restrict on update restrict;
+      references Utilisateur (idPersonne) on delete restrict on update restrict;
 
 alter table Seance add constraint FK_ASSOCIER foreign key (idMatiere)
       references Matiere (idMatiere) on delete restrict on update restrict;
@@ -260,7 +251,7 @@ alter table Seance add constraint FK_SUIVRE foreign key (idGroupe)
       references Groupe (idGroupe) on delete restrict on update restrict;
 
 alter table Secretaire add constraint FK_HERITAGE_PERS3 foreign key (idSecretaire)
-      references Personne (idPersonne) on delete restrict on update restrict;
+      references Utilisateur (idPersonne) on delete restrict on update restrict;
 
 alter table Semestre add constraint FK_SUIVRE_SEMESTRE foreign key (idFormation)
       references Formation (idFormation) on delete restrict on update restrict;
@@ -268,3 +259,61 @@ alter table Semestre add constraint FK_SUIVRE_SEMESTRE foreign key (idFormation)
 alter table Semestre add constraint FK_SUIVRE_SEMESTRE2 foreign key (idEtudiant)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
 
+ALTER DATABASE projets3 CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE Utilisateur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE Etudiant CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE Professeur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE Secretaire CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+CREATE TRIGGER identifiant_login_trigger
+  BEFORE INSERT ON Utilisateur
+  FOR EACH ROW
+  BEGIN
+     DECLARE nombrePersonne INT DEFAULT 1;
+     ##Verification de la longueur du nouvelle utillisateur
+     IF LENGTH(NEW.nomPers) < 4 THEN
+        WHILE length(NEW.nomPers) < 4 DO
+              SET NEW.nomPers = CONCAT(NEW.nomPers,"0");
+          END WHILE ;
+
+      END IF;
+      ##Verification que le nom n'existe pas
+      SELECT count(nomPers) INTO nombrePersonne
+      FROM Utilisateur
+      WHERE SUBSTR(nomPers,1,4) = SUBSTR(new.nomPers,1,4);
+
+      IF nombrePersonne < 10 THEN
+        SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"000",nombrePersonne);
+      ELSE
+         SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"00",nombrePersonne);
+      END IF;
+  END;
+
+
+CREATE TRIGGER insert_new_type_user
+  AFTER INSERT ON Utilisateur
+  FOR EACH ROW
+  BEGIN
+  DECLARE userType INT;
+    SELECT NEW.type INTO userType
+    FROM Utilisateur
+    WHERE idPersonne = NEW.idPersonne;
+     IF userType = 0 THEN
+      INSERT INTO Etudiant (idEtudiant) VALUES (NEW.idPersonne);
+    END IF;
+
+    IF userType = 1 THEN
+      INSERT INTO Professeur (idProfesseur) VALUES (NEW.idPersonne);
+    END IF;
+
+     IF userType = 2 THEN
+      INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
+    END IF;
+
+  END;
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
+  (null, 0, null, "JANCZEWSKI", "Nathan", "nathan", "123 rue toto", "Reims", "51100", "lol");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
+  (null, 1, null, "professeur", "Toto", "toto", "123 rue tutu", "Chalons", "51000", "l2l");
