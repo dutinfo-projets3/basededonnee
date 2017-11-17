@@ -4,268 +4,267 @@
 /*==============================================================*/
 
 SET FOREIGN_KEY_CHECKS = 0;
-drop table if exists APPARTIENT;
+drop table if exists Appartient;
 
-drop table if exists ETREABSENT;
+drop table if exists Absence;
 
-drop table if exists ETUDIANT;
+drop table if exists Etudiant;
 
-drop table if exists EVENEMENT;
+drop table if exists Evenement;
 
-drop table if exists FORMATION;
+drop table if exists Formation;
 
-drop table if exists GROUPE;
+drop table if exists Groupe;
 
-drop table if exists IMAGE;
+drop table if exists Image;
 
-drop table if exists MATIERE;
+drop table if exists Matiere;
 
-drop table if exists NOTES;
+drop table if exists Notes;
 
-drop table if exists PERSONNE;
+drop table if exists Personne;
 
-drop table if exists PROFESSEUR;
+drop table if exists Professeur;
 
-drop table if exists SALLE;
+drop table if exists Salle;
 
-drop table if exists SEANCE;
+drop table if exists Seance;
 
-drop table if exists SECRETAIRE;
+drop table if exists Secretaire;
 
-drop table if exists SUIVRE_SEMESTRE;
+drop table if exists Semestre;
 SET FOREIGN_KEY_CHECKS = 1;
 /*==============================================================*/
 /* Table : APPARTIENT                                           */
 /*==============================================================*/
-create table APPARTIENT
+create table Appartient
 (
-   IDGROUPE             int not null,
-   IDETUDIANT           int not null,
-   primary key (IDGROUPE, IDETUDIANT)
+   idGroupe             int not null,
+   idEtudiant           int not null,
+   primary key (idGroupe, idEtudiant)
 );
 
 /*==============================================================*/
 /* Table : ETREABSENT                                           */
 /*==============================================================*/
-create table ETREABSENT
+create table Absence
 (
-   IDSEANCE             int not null,
-   IDETUDIANT           int not null,
-   primary key (IDSEANCE, IDETUDIANT)
+   idSeance             int not null,
+   idEtudiant           int not null,
+   primary key (idSeance, idEtudiant)
 );
 
 /*==============================================================*/
 /* Table : ETUDIANT                                             */
 /*==============================================================*/
-create table ETUDIANT
+create table Etudiant
 (
-   IDETUDIANT           int not null,
-   INE                  varchar(50),
-   DATEENTREE           date,
-   primary key (IDETUDIANT)
+   idEtudiant           int not null,
+   ine                  varchar(50),
+   dateEntree           date,
+   primary key (idEtudiant)
 );
 
 /*==============================================================*/
 /* Table : EVENEMENT                                            */
 /*==============================================================*/
-create table EVENEMENT
+create table Evenement
 (
-   IDEVENNEMENT         int not null AUTO_INCREMENT,
-   IDSECRETAIRE         int not null,
-   NOMEVENEMENT         varchar(50),
-   NUMERO               numeric(8,0),
-   DESCRIPTION          text,
-   DATEPUBLICATION      date,
-   primary key (IDEVENNEMENT)
+   idEvenement         int not null AUTO_INCREMENT,
+   idSecretaire         int not null,
+   nomEvenement         varchar(50),
+   numero               numeric(8,0),
+   description          text,
+   datePublication      date,
+   primary key (idEvenement)
 );
 
 /*==============================================================*/
 /* Table : FORMATION                                            */
 /*==============================================================*/
-create table FORMATION
+create table Formation
 (
-   IDFORMATION          int not null AUTO_INCREMENT,
-   NUMERO               numeric(8,0),
-   DUREE                numeric(8,0),
-   primary key (IDFORMATION)
+   idFormation          int not null AUTO_INCREMENT,
+   numero               numeric(8,0),
+   duree                numeric(8,0),
+   primary key (idFormation)
 );
 
 /*==============================================================*/
 /* Table : GROUPE                                               */
 /*==============================================================*/
-create table GROUPE
+create table Groupe
 (
-   IDGROUPE             int not null AUTO_INCREMENT,
-   NUMERO               numeric(8,0),
-   primary key (IDGROUPE)
+   idGroupe             int not null AUTO_INCREMENT,
+   numero               numeric(8,0),
+   primary key (idGroupe)
 );
 
 /*==============================================================*/
 /* Table : IMAGE                                                */
 /*==============================================================*/
-create table IMAGE
+create table Image
 (
-   IDIMAGE              int not null AUTO_INCREMENT,
-   IDEVENNEMENT         int,
-   URL                  varchar(50),
-   primary key (IDIMAGE)
+   idImage              int not null AUTO_INCREMENT,
+   idEvenement         int,
+   url                  varchar(50),
+   primary key (idImage)
 );
 
 /*==============================================================*/
 /* Table : MATIERE                                              */
 /*==============================================================*/
-create table MATIERE
+create table Matiere
 (
-   IDMATIERE            int not null AUTO_INCREMENT,
-   IDFORMATION          int not null,
-   COEF                 decimal,
-   NOMMATIERE           varchar(50),
-   primary key (IDMATIERE)
+   idMatiere            int not null AUTO_INCREMENT,
+   idFormation          int not null,
+   coef                 decimal,
+   nomMatiere           varchar(50),
+   primary key (idMatiere)
 );
 
 /*==============================================================*/
 /* Table : NOTES                                                */
 /*==============================================================*/
-create table NOTES
+create table Notes
 (
-   IDNOTE               int not null AUTO_INCREMENT,
-   IDMATIERE            int not null,
-   IDPERSONNE           int not null,
-   VALEUR               int not null,
-   COEFF                decimal,
-   primary key (IDNOTE)
+   idNote               int not null AUTO_INCREMENT,
+   idMatiere            int not null,
+   idPersonne           int not null,
+   valeur               int not null,
+   coeff                decimal,
+   primary key (idNote)
 );
 
 /*==============================================================*/
 /* Table : PERSONNE                                             */
 /*==============================================================*/
-create table PERSONNE
+create table Personne
 (
-   IDPERSONNE           int not null AUTO_INCREMENT,
-   MOTDEPASSE           varchar(50),
-   NOMPERS              varchar(50),
-   PRENOMPERS           varchar(50),
-   ADRESSE              varchar(50),
-   CODEPOSTAL           numeric(5),
-   URLIMAGE             varchar(50),
-   VILLE                varchar(50),
-   NOMUTILISATEUR       varchar(8),
-   TYPE 		            int not null,
-	primary key (IDPERSONNE)
+   idPersonne           int not null AUTO_INCREMENT,
+   motDePasse           varchar(64),
+   nomPers              varchar(50),
+   prenomPers           varchar(50),
+   adresse              varchar(50),
+   codePostal           numeric(5),
+   urlImage             varchar(50),
+   ville                varchar(50),
+   nomUtilisateur       varchar(8),
+   type 		            int not null,
+	primary key (idPersonne)
 );
 
 /*==============================================================*/
 /* Table : PROFESSEUR                                           */
 /*==============================================================*/
-create table PROFESSEUR
+create table Professeur
 (
-   IDPROFESSEUR         int not null,
-     DATEEMBAUCHE         date,
-    DATEDEPART        date,
-   primary key (IDPROFESSEUR)
+   idProfesseur         int not null,
+     dateEmbauche         date,
+    dateDepart        date,
+   primary key (idProfesseur)
 );
 
 /*==============================================================*/
 /* Table : SALLE                                                */
 /*==============================================================*/
-create table SALLE
+create table Salle
 (
-   IDSALLE              int not null AUTO_INCREMENT,
-   NUMERO               numeric(8,0) not null,
-   BATIMENT             varchar(50) not null,
-   primary key (IDSALLE)
+   idSalle              int not null AUTO_INCREMENT,
+   numero               numeric(8,0) not null,
+   batiment             varchar(50) not null,
+   primary key (idSalle)
 );
 
 /*==============================================================*/
 /* Table : SEANCE                                               */
 /*==============================================================*/
-create table SEANCE
+create table Seance
 (
-   IDSEANCE             int not null AUTO_INCREMENT,
-   IDSALLE              int not null,
-   IDMATIERE            int not null,
-   IDGROUPE             int not null,
-   IDPROFESSEUR         int not null,
-   DATEDEBUT            date not null,
-   DATEFIN              date,
-   primary key (IDSEANCE)
+   idSeance             int not null AUTO_INCREMENT,
+   idSalle              int not null,
+   idMatiere            int not null,
+   idGroupe             int not null,
+   idProfesseur         int not null,
+   dateDebut            date not null,
+   dateFin              date,
+   primary key (idSeance)
 );
 
 /*==============================================================*/
 /* Table : SECRETAIRE                                           */
 /*==============================================================*/
-create table SECRETAIRE
+create table Secretaire
 (
-   IDSECRETAIRE         int not null,
-   DATEEMBAUCHE         date,
-    DATEDEPART        date,
-   primary key (IDSECRETAIRE)
+   idSecretaire         int not null,
+   dateEmbauche         date,
+    dateDepart        date,
+   primary key (idSecretaire)
 );
 
 /*==============================================================*/
 /* Table : SUIVRE_SEMESTRE                                      */
 /*==============================================================*/
-create table SUIVRE_SEMESTRE
+create table Semestre
 (
-   IDFORMATION          int not null,
-   IDETUDIANT           int not null,
-   NUMEROANNEEETUDE     int,
-   ANNEECOURANTE        int,
-   SEMESTRE             int,
-   primary key (IDFORMATION, IDETUDIANT)
+   idFormation          int not null,
+   idEtudiant           int not null,
+   numeroAnneeEtude     int,
+   anneeCourante        int,
+   semestre             int,
+   primary key (idFormation, idEtudiant)
 );
+alter table Appartient add constraint FK_APPARTIENT foreign key (idGroupe)
+      references Groupe (idGroupe) on delete restrict on update restrict;
 
-alter table APPARTIENT add constraint FK_APPARTIENT foreign key (IDGROUPE)
-      references GROUPE (IDGROUPE) on delete restrict on update restrict;
+alter table Appartient add constraint FK_APPARTIENT2 foreign key (idEtudiant)
+      references Etudiant (idEtudiant) on delete restrict on update restrict;
 
-alter table APPARTIENT add constraint FK_APPARTIENT2 foreign key (IDETUDIANT)
-      references ETUDIANT (IDETUDIANT) on delete restrict on update restrict;
+alter table Absence add constraint FK_ETREABSENT foreign key (idSeance)
+      references Seance (idSeance) on delete restrict on update restrict;
 
-alter table ETREABSENT add constraint FK_ETREABSENT foreign key (IDSEANCE)
-      references SEANCE (IDSEANCE) on delete restrict on update restrict;
+alter table Absence add constraint FK_ETREABSENT2 foreign key (idEtudiant)
+      references Etudiant (idEtudiant) on delete restrict on update restrict;
 
-alter table ETREABSENT add constraint FK_ETREABSENT2 foreign key (IDETUDIANT)
-      references ETUDIANT (IDETUDIANT) on delete restrict on update restrict;
+alter table Etudiant add constraint FK_HERITAGE_PERS foreign key (idEtudiant)
+      references Personne (idPersonne) on delete restrict on update restrict;
 
-alter table ETUDIANT add constraint FK_HERITAGE_PERS foreign key (IDETUDIANT)
-      references PERSONNE (IDPERSONNE) on delete restrict on update restrict;
+alter table Evenement add constraint FK_AJOUTER foreign key (idSecretaire)
+      references Secretaire (idSecretaire) on delete restrict on update restrict;
 
-alter table EVENEMENT add constraint FK_AJOUTER foreign key (IDSECRETAIRE)
-      references SECRETAIRE (IDSECRETAIRE) on delete restrict on update restrict;
+alter table Image add constraint FK_CONTENIR foreign key (idEvenement)
+      references Evenement (idEvenement) on delete restrict on update restrict;
 
-alter table IMAGE add constraint FK_CONTENIR foreign key (IDEVENNEMENT)
-      references EVENEMENT (IDEVENNEMENT) on delete restrict on update restrict;
+alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
+      references Formation (idFormation) on delete restrict on update restrict;
 
-alter table MATIERE add constraint FK_CARACTERISER foreign key (IDFORMATION)
-      references FORMATION (IDFORMATION) on delete restrict on update restrict;
+alter table Notes add constraint FK_NOTER foreign key (idMatiere)
+      references Matiere (idMatiere) on delete restrict on update restrict;
 
-alter table NOTES add constraint FK_NOTER foreign key (IDMATIERE)
-      references MATIERE (IDMATIERE) on delete restrict on update restrict;
+alter table Notes add constraint FK_POSSEDER foreign key (idPersonne)
+      references Etudiant (idEtudiant) on delete restrict on update restrict;
 
-alter table NOTES add constraint FK_POSSEDER foreign key (IDPERSONNE)
-      references ETUDIANT (IDETUDIANT) on delete restrict on update restrict;
+alter table Professeur add constraint FK_HERITAGE_PERS2 foreign key (idProfesseur)
+      references Personne (idPersonne) on delete restrict on update restrict;
 
-alter table PROFESSEUR add constraint FK_HERITAGE_PERS2 foreign key (IDPROFESSEUR)
-      references PERSONNE (IDPERSONNE) on delete restrict on update restrict;
+alter table Seance add constraint FK_ASSOCIER foreign key (idMatiere)
+      references Matiere (idMatiere) on delete restrict on update restrict;
 
-alter table SEANCE add constraint FK_ASSOCIER foreign key (IDMATIERE)
-      references MATIERE (IDMATIERE) on delete restrict on update restrict;
+alter table Seance add constraint FK_DONNER foreign key (idProfesseur)
+      references Professeur (idProfesseur) on delete restrict on update restrict;
 
-alter table SEANCE add constraint FK_DONNER foreign key (IDPROFESSEUR)
-      references PROFESSEUR (IDPROFESSEUR) on delete restrict on update restrict;
+alter table Seance add constraint FK_LOCALISER foreign key (idSalle)
+      references Salle (idSalle) on delete restrict on update restrict;
 
-alter table SEANCE add constraint FK_LOCALISER foreign key (IDSALLE)
-      references SALLE (IDSALLE) on delete restrict on update restrict;
+alter table Seance add constraint FK_SUIVRE foreign key (idGroupe)
+      references Groupe (idGroupe) on delete restrict on update restrict;
 
-alter table SEANCE add constraint FK_SUIVRE foreign key (IDGROUPE)
-      references GROUPE (IDGROUPE) on delete restrict on update restrict;
+alter table Secretaire add constraint FK_HERITAGE_PERS3 foreign key (idSecretaire)
+      references Personne (idPersonne) on delete restrict on update restrict;
 
-alter table SECRETAIRE add constraint FK_HERITAGE_PERS3 foreign key (IDSECRETAIRE)
-      references PERSONNE (IDPERSONNE) on delete restrict on update restrict;
+alter table Semestre add constraint FK_SUIVRE_SEMESTRE foreign key (idFormation)
+      references Formation (idFormation) on delete restrict on update restrict;
 
-alter table SUIVRE_SEMESTRE add constraint FK_SUIVRE_SEMESTRE foreign key (IDFORMATION)
-      references FORMATION (IDFORMATION) on delete restrict on update restrict;
-
-alter table SUIVRE_SEMESTRE add constraint FK_SUIVRE_SEMESTRE2 foreign key (IDETUDIANT)
-      references ETUDIANT (IDETUDIANT) on delete restrict on update restrict;
+alter table Semestre add constraint FK_SUIVRE_SEMESTRE2 foreign key (idEtudiant)
+      references Etudiant (idEtudiant) on delete restrict on update restrict;
 

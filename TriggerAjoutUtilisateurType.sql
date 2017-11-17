@@ -1,21 +1,21 @@
 CREATE TRIGGER insert_new_type_user
-  AFTER INSERT ON PERSONNE
+  AFTER INSERT ON Personne
   FOR EACH ROW
   BEGIN
   DECLARE userType INT;
-    SELECT NEW.TYPE INTO userType
-    FROM PERSONNE
-    WHERE IDPERSONNE = NEW.IDPERSONNE;
+    SELECT NEW.type INTO userType
+    FROM Personne
+    WHERE idPersonne = NEW.idPersonne;
      IF userType = 0 THEN
-      INSERT INTO ETUDIANT (IDETUDIANT) VALUES (NEW.IDPERSONNE);
+      INSERT INTO Etudiant (idEtudiant) VALUES (NEW.idPersonne);
     END IF;
     
     IF userType = 1 THEN
-      INSERT INTO PROFESSEUR (IDPROFESSEUR) VALUES (NEW.IDPERSONNE);
+      INSERT INTO Professeur (idProfesseur) VALUES (NEW.idPersonne);
     END IF;
     
      IF userType = 2 THEN
-      INSERT INTO SECRETAIRE (IDSECRETAIRE) VALUES (NEW.IDPERSONNE);
+      INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
     END IF;
 
   END;
