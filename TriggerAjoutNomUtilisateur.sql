@@ -1,25 +1,24 @@
-CREATE TRIGGER identifiant_login_trigger
-  BEFORE INSERT ON Personne
+CREATE TRIGGER insert_new_type_user
+  AFTER INSERT ON Utilisateur
   FOR EACH ROW
   BEGIN
-     DECLARE nombrePersonne INT DEFAULT 1;
-     ##Verification de la longueur du nouvelle utillisateur
-     IF LENGTH(NEW.nomPers) < 4 THEN
-        WHILE length(NEW.nomPers) < 4 DO
-              SET NEW.nomPers = CONCAT(NEW.nomPers,"0");
-          END WHILE ;
+  DECLARE userType INT DEFAULT 0;
+    SELECT NEW.type INTO userType
+    FROM Utilisateur
+    WHERE idPersonne = NEW.idPersonne;
+     IF userType = 0 THEN
+      INSERT INTO Etudiant (idEtudiant) VALUES (NEW.idPersonne);
+    END IF;
 
-      END IF;
-      ##Verification que le nom n'existe pas
-      SELECT count(nomPers) INTO nombrePersonne
-      FROM Personne
-      WHERE SUBSTR(nomPers,1,4) = SUBSTR(new.nomPers,1,4);
+    IF userType = 1 THEN
+      INSERT INTO Professeur (idProfesseur) VALUES (NEW.idPersonne);
+    END IF;
 
-      IF nombrePersonne < 10 THEN
-        SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"000",nombrePersonne);
-      ELSE
-         SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"00",nombrePersonne);
-      END IF;
+     IF userType = 2 THEN
+      INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
+    END IF;
+
+    set userType = 0;
+
   END;
-
 DROP TRIGGER identifiant_login_trigger;

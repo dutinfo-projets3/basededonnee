@@ -21,9 +21,6 @@ drop table if exists Seance;
 drop table if exists Secretaire;
 drop table if exists Semestre;
 
-DROP TRIGGER insert_new_type_user;
-DROP TRIGGER identifiant_login_trigger;
-
 SET FOREIGN_KEY_CHECKS = 1;
 /*==============================================================*/
 /* Table : APPARTIENT                                           */
@@ -57,17 +54,17 @@ create table Etudiant
 );
 
 /*==============================================================*/
-/* Table : EVENEMENT                                            */
+/* Table : NEWS                                            */
 /*==============================================================*/
 create table News
 (
-   idEvenement         int not null AUTO_INCREMENT,
+   idNews         int not null AUTO_INCREMENT,
    idSecretaire         int not null,
    nomEvenement         varchar(50),
    numero               numeric(8,0),
    description          text,
    datePublication      date,
-   primary key (idEvenement)
+   primary key (idNews)
 );
 
 /*==============================================================*/
@@ -224,7 +221,7 @@ alter table News add constraint FK_AJOUTER foreign key (idSecretaire)
       references Secretaire (idSecretaire) on delete restrict on update restrict;
 
 alter table Image add constraint FK_CONTENIR foreign key (idEvenement)
-      references News (idEvenement) on delete restrict on update restrict;
+      references News (idNews) on delete restrict on update restrict;
 
 alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
       references Formation (idFormation) on delete restrict on update restrict;
@@ -264,29 +261,31 @@ ALTER TABLE Utilisateur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Etudiant CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Professeur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Secretaire CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-
 CREATE TRIGGER identifiant_login_trigger
   BEFORE INSERT ON Utilisateur
   FOR EACH ROW
   BEGIN
-     DECLARE nombrePersonne INT DEFAULT 1;
+     DECLARE nombrePersonne INT;
+    DECLARE newNomPers VARCHAR(50);
      ##Verification de la longueur du nouvelle utillisateur
-     IF LENGTH(NEW.nomPers) < 4 THEN
-        WHILE length(NEW.nomPers) < 4 DO
-              SET NEW.nomPers = CONCAT(NEW.nomPers,"0");
+    SET  newNomPers = NEW.nomPers;
+     IF LENGTH(newNomPers) < 4 THEN
+        WHILE length(newNomPers) < 4 DO
+              SET newNomPers = CONCAT(newNomPers,"0");
           END WHILE ;
 
       END IF;
       ##Verification que le nom n'existe pas
-      SELECT count(nomPers) INTO nombrePersonne
+      SELECT count(newNomPers) INTO nombrePersonne
       FROM Utilisateur
-      WHERE SUBSTR(nomPers,1,4) = SUBSTR(new.nomPers,1,4);
+      WHERE SUBSTR(nomUtilisateur,1,4) = SUBSTR(newNomPers,1,4);
 
-      IF nombrePersonne < 10 THEN
-        SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"000",nombrePersonne);
+      IF nombrePersonne < 9 THEN
+        SET NEW.nomUtilisateur = lower(CONCAT(SUBSTR(newNomPers,1,4),"000",nombrePersonne+1));
       ELSE
-         SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"00",nombrePersonne);
+         SET NEW.nomUtilisateur = lower(CONCAT(SUBSTR(newNomPers,1,4),"00",nombrePersonne+1));
       END IF;
+
   END;
 
 
@@ -294,7 +293,7 @@ CREATE TRIGGER insert_new_type_user
   AFTER INSERT ON Utilisateur
   FOR EACH ROW
   BEGIN
-  DECLARE userType INT;
+  DECLARE userType INT DEFAULT 0;
     SELECT NEW.type INTO userType
     FROM Utilisateur
     WHERE idPersonne = NEW.idPersonne;
@@ -310,10 +309,13 @@ CREATE TRIGGER insert_new_type_user
       INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
     END IF;
 
+    set userType = 0;
+
   END;
 
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, "JANCZEWSKI", "Nathan", "nathan", "123 rue toto", "Reims", "51100", "lol");
+  (null, 0, null, UPPER('JANCZEWSKI'), 'Nathan', sha2('nathan',256), '123 rue toto', 'Reims', '51100', 'lol');
 
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 1, null, "professeur", "Toto", "toto", "123 rue tutu", "Chalons", "51000", "l2l");
+  (null, 0, null, UPPER('Begerot'), 'Leo', sha2('leo',256), '123 rue toto', 'Reims', '51100', 'lol');
+
