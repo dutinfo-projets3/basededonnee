@@ -268,3 +268,11 @@ alter table Semestre add constraint FK_SUIVRE_SEMESTRE foreign key (idFormation)
 alter table Semestre add constraint FK_SUIVRE_SEMESTRE2 foreign key (idEtudiant)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
 
+ALTER DATABASE projets3 CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Personne CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Etudiant CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Secretaire CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Seance CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Semestre CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Evenement CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE projets3.Matiere CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
