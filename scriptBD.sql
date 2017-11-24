@@ -138,8 +138,7 @@ create table Utilisateur
    adresse              varchar(50),
    ville                varchar(50),
    codePostal           numeric(5),
-   urlImage             varchar(50),
-	primary key (idPersonne)
+   primary key (idPersonne)
 );
 
 /*==============================================================*/
@@ -275,7 +274,6 @@ CREATE TRIGGER identifiant_login_trigger
           END WHILE ;
 
       END IF;
-      ##Verification que le nom n'existe pas
       SELECT count(newNomPers) INTO nombrePersonne
       FROM Utilisateur
       WHERE SUBSTR(nomUtilisateur,1,4) = SUBSTR(newNomPers,1,4);
@@ -313,9 +311,11 @@ CREATE TRIGGER insert_new_type_user
 
   END;
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, UPPER('JANCZEWSKI'), 'Nathan', sha2('nathan',256), '123 rue toto', 'Reims', '51100', 'lol');
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal) VALUES
+  (null, 0, null, UPPER('ETUDIANT'), 'Toto', sha2('azerty', 256), '123 rue toto', 'Reims', '51100');
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, UPPER('Begerot'), 'Leo', sha2('leo',256), '123 rue toto', 'Reims', '51100', 'lol');
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal) VALUES
+  (null, 1, null, UPPER('PROFESSEUR'), 'Tutu', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000);
 
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal) VALUES
+  (null, 2, null, UPPER('SECRETAIRE'), 'Tata', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000);
