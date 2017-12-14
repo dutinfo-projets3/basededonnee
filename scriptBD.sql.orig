@@ -21,9 +21,6 @@ drop table if exists Seance;
 drop table if exists Secretaire;
 drop table if exists Semestre;
 
-DROP TRIGGER insert_new_type_user;
-DROP TRIGGER identifiant_login_trigger;
-
 SET FOREIGN_KEY_CHECKS = 1;
 /*==============================================================*/
 /* Table : APPARTIENT                                           */
@@ -57,17 +54,22 @@ create table Etudiant
 );
 
 /*==============================================================*/
-/* Table : EVENEMENT                                            */
+/* Table : NEWS                                            */
 /*==============================================================*/
 create table News
 (
-   idEvenement         int not null AUTO_INCREMENT,
+   idNews         int not null AUTO_INCREMENT,
    idSecretaire         int not null,
    nomEvenement         varchar(50),
+<<<<<<< HEAD
    numero               numeric(8,0),
+   description          LONGBLOB,
+   datePublication      DATETIME,
+=======
    description          text,
    datePublication      date,
-   primary key (idEvenement)
+>>>>>>> bc9588288e26451786ed7bc292b693678cd71210
+   primary key (idNews)
 );
 
 /*==============================================================*/
@@ -97,8 +99,8 @@ create table Groupe
 create table Image
 (
    idImage              int not null AUTO_INCREMENT,
-   idEvenement         int,
    url                  varchar(50),
+   commentaire          varchar(255),
    primary key (idImage)
 );
 
@@ -141,8 +143,9 @@ create table Utilisateur
    adresse              varchar(50),
    ville                varchar(50),
    codePostal           numeric(5),
-   urlImage             varchar(50),
-	primary key (idPersonne)
+   mail                 varchar(35),
+   numerotel            varchar(12)
+   primary key (idPersonne)
 );
 
 /*==============================================================*/
@@ -223,9 +226,6 @@ alter table Etudiant add constraint FK_HERITAGE_PERS foreign key (idEtudiant)
 alter table News add constraint FK_AJOUTER foreign key (idSecretaire)
       references Secretaire (idSecretaire) on delete restrict on update restrict;
 
-alter table Image add constraint FK_CONTENIR foreign key (idEvenement)
-      references News (idEvenement) on delete restrict on update restrict;
-
 alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
       references Formation (idFormation) on delete restrict on update restrict;
 
@@ -260,70 +260,93 @@ alter table Semestre add constraint FK_SUIVRE_SEMESTRE2 foreign key (idEtudiant)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
 
 ALTER DATABASE projets3 CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-<<<<<<< HEAD
-ALTER TABLE projets3.Personne CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Etudiant CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Secretaire CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Seance CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Semestre CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Evenement CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE projets3.Matiere CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-=======
 ALTER TABLE Utilisateur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Etudiant CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Professeur CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE Secretaire CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-
 CREATE TRIGGER identifiant_login_trigger
   BEFORE INSERT ON Utilisateur
   FOR EACH ROW
   BEGIN
-     DECLARE nombrePersonne INT DEFAULT 1;
+     DECLARE nombrePersonne INT;
+    DECLARE newNomPers VARCHAR(50);
      ##Verification de la longueur du nouvelle utillisateur
-     IF LENGTH(NEW.nomPers) < 4 THEN
-        WHILE length(NEW.nomPers) < 4 DO
-              SET NEW.nomPers = CONCAT(NEW.nomPers,"0");
+    SET  newNomPers = NEW.nomPers;
+     IF LENGTH(newNomPers) < 4 THEN
+        WHILE length(newNomPers) < 4 DO
+              SET newNomPers = CONCAT(newNomPers,"0");
           END WHILE ;
 
       END IF;
-      ##Verification que le nom n'existe pas
-      SELECT count(nomPers) INTO nombrePersonne
+      SELECT count(newNomPers) INTO nombrePersonne
       FROM Utilisateur
-      WHERE SUBSTR(nomPers,1,4) = SUBSTR(new.nomPers,1,4);
+      WHERE SUBSTR(nomUtilisateur,1,4) = SUBSTR(newNomPers,1,4);
 
-      IF nombrePersonne < 10 THEN
-        SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"000",nombrePersonne);
+      IF nombrePersonne < 9 THEN
+        SET NEW.nomUtilisateur = lower(CONCAT(SUBSTR(newNomPers,1,4),"000",nombrePersonne+1));
       ELSE
-         SET NEW.nomUtilisateur = CONCAT(SUBSTR(new.nomPers,1,4),"00",nombrePersonne);
+         SET NEW.nomUtilisateur = lower(CONCAT(SUBSTR(newNomPers,1,4),"00",nombrePersonne+1));
       END IF;
-  END;
-
-
-CREATE TRIGGER insert_new_type_user
-  AFTER INSERT ON Utilisateur
-  FOR EACH ROW
-  BEGIN
-  DECLARE userType INT;
-    SELECT NEW.type INTO userType
-    FROM Utilisateur
-    WHERE idPersonne = NEW.idPersonne;
-     IF userType = 0 THEN
-      INSERT INTO Etudiant (idEtudiant) VALUES (NEW.idPersonne);
-    END IF;
-
-    IF userType = 1 THEN
-      INSERT INTO Professeur (idProfesseur) VALUES (NEW.idPersonne);
-    END IF;
-
-     IF userType = 2 THEN
-      INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
-    END IF;
 
   END;
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, "JANCZEWSKI", "Nathan", "nathan", "123 rue toto", "Reims", "51100", "lol");
 
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 1, null, UPPER('PROFESSEUR'), 'Tutu', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 2, null, UPPER('SECRETAIRE'), 'Tata', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+  
+  INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('berg0007', 0, null, UPPER('BERGEROT'), 'Léo', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('braz0002', 0, null, UPPER('BRAZE'), 'Thomas', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('duch0009', 0, null, UPPER('DUCHENE'), 'Sebastien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('gera0013', 0, null, UPPER('GERARD'), 'Vivien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('GILLARD'), 'Lucille', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HAMELLE'), 'Fabien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HUBERT'), 'Laurie', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HUSSON'), 'Loic', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('JANCZEWSKI'), 'Nathan', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('LEBEGUE'), 'Gaetan', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('NIGRO'), 'Florian', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('PERSEVAL'), 'Alexandre', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('RICHARD'), 'Lucas', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('SEINGIER'), 'Mikael', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('THIBAULT'), 'Guillaume', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+<<<<<<< HEAD
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 1, null, "professeur", "Toto", "toto", "123 rue tutu", "Chalons", "51000", "l2l");
->>>>>>> 5de03ec693dff20782e8686577ef0228c9a43580
+  (null, 2, null, UPPER('secretaire'), 'lBG', sha2('azerty',256), '123 rue toto', 'Reims', '51100', 'lol');
+
+=======
+INSERT INTO News(idNews, idSecretaire, nomEvenement, description, datePublication) VALUES
+  (null, 1, 'Ouverture d"une nouvelle formation', null, 'Bonjour, une nouvelle formation vient de faire son apparition à l"université.', SYSDATE());
+>>>>>>> bc9588288e26451786ed7bc292b693678cd71210

@@ -61,7 +61,6 @@ create table News
    idNews         int not null AUTO_INCREMENT,
    idSecretaire         int not null,
    nomEvenement         varchar(50),
-   numero               numeric(8,0),
    description          LONGBLOB,
    datePublication      DATETIME,
    primary key (idNews)
@@ -94,8 +93,8 @@ create table Groupe
 create table Image
 (
    idImage              int not null AUTO_INCREMENT,
-   idEvenement         int,
    url                  varchar(50),
+   commentaire          varchar(255),
    primary key (idImage)
 );
 
@@ -138,8 +137,9 @@ create table Utilisateur
    adresse              varchar(50),
    ville                varchar(50),
    codePostal           numeric(5),
-   urlImage             varchar(50),
-	primary key (idPersonne)
+   mail                 varchar(35),
+   numerotel            varchar(12)
+   primary key (idPersonne)
 );
 
 /*==============================================================*/
@@ -220,9 +220,6 @@ alter table Etudiant add constraint FK_HERITAGE_PERS foreign key (idEtudiant)
 alter table News add constraint FK_AJOUTER foreign key (idSecretaire)
       references Secretaire (idSecretaire) on delete restrict on update restrict;
 
-alter table Image add constraint FK_CONTENIR foreign key (idEvenement)
-      references News (idNews) on delete restrict on update restrict;
-
 alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
       references Formation (idFormation) on delete restrict on update restrict;
 
@@ -275,7 +272,6 @@ CREATE TRIGGER identifiant_login_trigger
           END WHILE ;
 
       END IF;
-      ##Verification que le nom n'existe pas
       SELECT count(newNomPers) INTO nombrePersonne
       FROM Utilisateur
       WHERE SUBSTR(nomUtilisateur,1,4) = SUBSTR(newNomPers,1,4);
@@ -289,36 +285,56 @@ CREATE TRIGGER identifiant_login_trigger
   END;
 
 
-CREATE TRIGGER insert_new_type_user
-  AFTER INSERT ON Utilisateur
-  FOR EACH ROW
-  BEGIN
-  DECLARE userType INT DEFAULT 0;
-    SELECT NEW.type INTO userType
-    FROM Utilisateur
-    WHERE idPersonne = NEW.idPersonne;
-     IF userType = 0 THEN
-      INSERT INTO Etudiant (idEtudiant) VALUES (NEW.idPersonne);
-    END IF;
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 1, null, UPPER('PROFESSEUR'), 'Tutu', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-    IF userType = 1 THEN
-      INSERT INTO Professeur (idProfesseur) VALUES (NEW.idPersonne);
-    END IF;
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 2, null, UPPER('SECRETAIRE'), 'Tata', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+  
+  INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('berg0007', 0, null, UPPER('BERGEROT'), 'Léo', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-     IF userType = 2 THEN
-      INSERT INTO Secretaire (idSecretaire) VALUES (NEW.idPersonne);
-    END IF;
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('braz0002', 0, null, UPPER('BRAZE'), 'Thomas', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-    set userType = 0;
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('duch0009', 0, null, UPPER('DUCHENE'), 'Sebastien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-  END;
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  ('gera0013', 0, null, UPPER('GERARD'), 'Vivien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, UPPER('JANCZEWSKI'), 'Nathan', sha2('nathan',256), '123 rue toto', 'Reims', '51100', 'lol');
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('GILLARD'), 'Lucille', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 0, null, UPPER('Begerot'), 'Leo', sha2('leo',256), '123 rue toto', 'Reims', '51100', 'lol');
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HAMELLE'), 'Fabien', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
-INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
-  (null, 2, null, UPPER('secretaire'), 'lBG', sha2('azerty',256), '123 rue toto', 'Reims', '51100', 'lol');
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HUBERT'), 'Laurie', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('HUSSON'), 'Loic', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('JANCZEWSKI'), 'Nathan', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('LEBEGUE'), 'Gaetan', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('NIGRO'), 'Florian', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('PERSEVAL'), 'Alexandre', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('RICHARD'), 'Lucas', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('SEINGIER'), 'Mikael', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
+  (null, 0, null, UPPER('THIBAULT'), 'Guillaume', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+
+INSERT INTO News(idNews, idSecretaire, nomEvenement, description, datePublication) VALUES
+  (null, 1, 'Ouverture d"une nouvelle formation', null, 'Bonjour, une nouvelle formation vient de faire son apparition à l"université.', SYSDATE());
