@@ -62,8 +62,8 @@ create table News
    idSecretaire         int not null,
    nomEvenement         varchar(50),
    numero               numeric(8,0),
-   description          text,
-   datePublication      date,
+   description          LONGBLOB,
+   datePublication      DATETIME,
    primary key (idNews)
 );
 
@@ -318,4 +318,7 @@ INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, m
 
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
   (null, 0, null, UPPER('Begerot'), 'Leo', sha2('leo',256), '123 rue toto', 'Reims', '51100', 'lol');
+
+INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage) VALUES
+  (null, 2, null, UPPER('secretaire'), 'lBG', sha2('azerty',256), '123 rue toto', 'Reims', '51100', 'lol');
 

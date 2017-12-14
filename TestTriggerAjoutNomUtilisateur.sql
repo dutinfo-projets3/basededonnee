@@ -4,6 +4,12 @@ INSERT INTO utilisateur (nomPers, prenomPers, adresse, type,motDePasse) VALUES (
 INSERT INTO utilisateur (nomPers, prenomPers, adresse, type,motDePasse) VALUES ('zuu', 'alexandre', '61100', 2, SHA2('azerty', '256'));
 DROP TRIGGER identifiant_login_trigger;
 
+INSERT INTO Utilisateur (type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, urlImage)
+       VALUES (-1, 'test', 'testNom', 'test');
+
+INSERT INTO news (idSecretaire, nomEvenement, numero, description, datePublication) VALUES (3, 'troisiéme test', 1, "Fonctionnelle", STR_TO_DATE('24,3,2016','%d,%m,%Y'));
+SELECT *
+FROM news;
 
 SELECT *
 FROM utilisateur;
@@ -21,5 +27,13 @@ SELECT
     constraint_name,
     table_name
 FROM
-    information_schema.table_constraints
+    information_schema.table_constraints;
+SET FOREIGN_KEY_CHECKS = 1;
+
+SELECT * FROM News;
+ALTER TABLE News
+MODIFY datePublication DATETIME;
+
+SELECT datePublication
+FROM News;
 
