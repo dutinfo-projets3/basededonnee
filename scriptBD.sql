@@ -221,7 +221,7 @@ alter table News add constraint FK_AJOUTER foreign key (idSecretaire)
       references Secretaire (idSecretaire) on delete restrict on update restrict;
 
 alter table Matiere add constraint FK_CARACTERISER foreign key (idFormation)
-      references Formation (idFormation) on delete restrict on update restrict;
+      references Formation (idFormation) on delete CASCADE on update CASCADE;
 
 alter table Notes add constraint FK_NOTER foreign key (idMatiere)
       references Matiere (idMatiere) on delete restrict on update restrict;
@@ -287,6 +287,7 @@ CREATE TRIGGER identifiant_login_trigger
 
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
   (null, 1, null, UPPER('PROFESSEUR'), 'Tutu', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
+INSERT INTO Secretaire (idSecretaire, dateEmbauche, dateDepart) VALUE (2, NOW(), null);
 
 INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, motDePasse, adresse, ville, codePostal, mail, numerotel) VALUES
   (null, 2, null, UPPER('SECRETAIRE'), 'Tata', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");

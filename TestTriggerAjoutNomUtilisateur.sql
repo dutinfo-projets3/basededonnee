@@ -23,6 +23,11 @@ FROM professeur;
 SELECT *
 FROM secretaire;
 
+SELECT *
+FROM Formation;
+
+SELECT *
+FROM matiere
 SELECT
     constraint_name,
     table_name
@@ -34,6 +39,8 @@ SELECT * FROM News;
 ALTER TABLE News
 MODIFY datePublication DATETIME;
 
-SELECT datePublication
+SELECT description, idNews
 FROM News;
+
+DELETE FRom News WHERE idNews=9;
 
