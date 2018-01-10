@@ -74,6 +74,7 @@ create table Formation
    idFormation          int not null AUTO_INCREMENT,
    numero               numeric(8,0),
    duree                numeric(8,0),
+   description          LONGBLOB,
    primary key (idFormation)
 );
 
@@ -138,7 +139,7 @@ create table Utilisateur
    ville                varchar(50),
    codePostal           numeric(5),
    mail                 varchar(35),
-   numerotel            varchar(12)
+   numerotel            varchar(12),
    primary key (idPersonne)
 );
 
