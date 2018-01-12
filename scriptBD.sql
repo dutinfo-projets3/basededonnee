@@ -19,7 +19,6 @@ drop table if exists Professeur;
 drop table if exists Salle;
 drop table if exists Seance;
 drop table if exists Secretaire;
-drop table if exists Semestre;
 drop table if exists AnneeScolaire;
 drop table if exists InscriptionEleve;
 
@@ -74,7 +73,7 @@ create table News
 create table Formation
 (
    idFormation          int not null AUTO_INCREMENT,
-   nom                  VARCHAR(100),
+   nomFormation         VARCHAR(100),
    duree                numeric(8,0),
    description          LONGBLOB,
    primary key (idFormation)
@@ -195,8 +194,8 @@ create table Seance
    idMatiere            int not null,
    idGroupe             int not null,
    idProfesseur         int not null,
-   dateDebut            date not null,
-   dateFin              date,
+   dateDebut            DATETIME not null,
+   dateFin              DATETIME,
    primary key (idSeance)
 );
 
@@ -211,18 +210,6 @@ create table Secretaire
    primary key (idSecretaire)
 );
 
-/*==============================================================*/
-/* Table : SUIVRE_SEMESTRE                                      */
-/*==============================================================*/
-create table Semestre
-(
-   idFormation          int not null,
-   idEtudiant           int not null,
-   numeroAnneeEtude     int,
-   anneeCourante        int,
-   semestre             int,
-   primary key (idFormation, idEtudiant)
-);
 alter table Appartient add constraint FK_APPARTIENT foreign key (idGroupe)
       references Groupe (idGroupe) on delete restrict on update restrict;
 
@@ -267,12 +254,6 @@ alter table Seance add constraint FK_SUIVRE foreign key (idGroupe)
 
 alter table Secretaire add constraint FK_HERITAGE_PERS3 foreign key (idSecretaire)
       references Utilisateur (idPersonne) on delete restrict on update restrict;
-
-alter table Semestre add constraint FK_SUIVRE_SEMESTRE foreign key (idFormation)
-      references Formation (idFormation) on delete restrict on update restrict;
-
-alter table Semestre add constraint FK_SUIVRE_SEMESTRE2 foreign key (idEtudiant)
-      references Etudiant (idEtudiant) on delete restrict on update restrict;
 
 alter table InscriptionEleve add constraint FK_IDANNEE foreign key (idAnneeScolaire)
       references AnneeScolaire (idAnnee) on delete restrict on update restrict;
@@ -332,7 +313,7 @@ INSERT INTO Utilisateur(idPersonne, type, nomUtilisateur, nomPers, prenomPers, m
   (null, 0, null, UPPER('BERGEROT'), 'Léo', sha2('azerty', 256), '123 rue localhost', 'Chalons', 51000, "toto@toto.fr", "336123456789");
 INSERT INTO Etudiant(idEtudiant, dateEntree, INE) VALUES (3, NOW(), "Toto");
 
-INSERT INTO Formation(idFormation, nom, duree, description) VALUES (null, "DUT Info", 2, NULL);
+INSERT INTO Formation(idFormation, nomFormation, duree, description) VALUES (null, "DUT Info", 2, NULL);
 
 INSERT INTO Matiere(idFormation, coef, nomMatiere) VALUES (1, 2, "Mathématiques");
 INSERT INTO Matiere(idFormation, coef, nomMatiere) VALUES (1, 3, "POO - Java");
