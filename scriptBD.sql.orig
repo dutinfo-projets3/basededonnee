@@ -85,8 +85,12 @@ create table Formation
 create table Groupe
 (
    idGroupe             int not null AUTO_INCREMENT,
-   nom                  VARCHAR(100),
+<<<<<<< HEAD
+   numero               numeric(8,0),
    idFormation          int,
+=======
+   nom                  VARCHAR(100),
+>>>>>>> 45534e6e38baa4aad05ed3fc3e0e58bcb0ce466a
    primary key (idGroupe)
 );
 
