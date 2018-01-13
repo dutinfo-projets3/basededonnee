@@ -24,11 +24,12 @@ SELECT *
 FROM secretaire;
 
 SELECT *
-FROM Formation;
+FROM matiere;
 
+SELECT * FROM formation
 
 SELECT *
-FROM matiere
+FROM groupe;
 SELECT
     constraint_name,
     table_name

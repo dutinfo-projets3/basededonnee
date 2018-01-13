@@ -85,6 +85,7 @@ create table Groupe
 (
    idGroupe             int not null AUTO_INCREMENT,
    numero               numeric(8,0),
+   idFormation          int,
    primary key (idGroupe)
 );
 
@@ -208,7 +209,8 @@ alter table Appartient add constraint FK_APPARTIENT foreign key (idGroupe)
 
 alter table Appartient add constraint FK_APPARTIENT2 foreign key (idEtudiant)
       references Etudiant (idEtudiant) on delete restrict on update restrict;
-
+alter table groupe add CONSTRAINT  FK_formation FOREIGN KEY (idFormation)
+      references Formation (idFormation) on delete RESTRICT  on update restrict;
 alter table Absence add constraint FK_ETREABSENT foreign key (idSeance)
       references Seance (idSeance) on delete restrict on update restrict;
 
